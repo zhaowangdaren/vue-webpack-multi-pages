@@ -28,7 +28,6 @@ function addPages() {
     multiConfig.entry[pages[i].entry] = './src/' + pages[i].entry
 
     let chunks = [pages[i].name + '-vendor']
-    // chunks = chunks.concat(pages[i].vendor)
     chunks.push(pages[i].entry)
     multiConfig.plugins.push(new HtmlWebpackPlugin({
       chunks: chunks,
