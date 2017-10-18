@@ -25,11 +25,6 @@ function addPages() {
       filename: pages[i].filename,
       template: pages[i].template,
     }))
-
-    multiConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-      name: pages[i].name + '-vendor',
-      chunks: pages[i].vendor
-    }))
   }
   return multiConfig
 }
