@@ -16,7 +16,7 @@ function addPages() {
   }
   for (let i = 0; i < pages.length; i++) {
     multiConfig.entry[pages[i].name] = pages[i].entry
-    let chunks = pages[i].entry
+    // let chunks = pages[i].entry
     multiConfig.plugins.push(new HtmlWebpackPlugin({
       chunks: [pages[i].name],
       // chunksSortMode: function (a, b) {
