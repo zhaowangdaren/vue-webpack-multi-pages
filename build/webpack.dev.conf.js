@@ -15,14 +15,13 @@ function addPages() {
     plugins: []
   }
   for (let i = 0; i < pages.length; i++) {
-    multiConfig.entry[pages[i].entry] = './src/' + pages[i].entry
-    let chunks = [pages[i].name + '-vendor']
-    chunks.push(pages[i].entry)
+    multiConfig.entry[pages[i].name] = pages[i].entry
+    let chunks = pages[i].entry
     multiConfig.plugins.push(new HtmlWebpackPlugin({
-      chunks: chunks,
-      chunksSortMode: function (a, b) {
-        return  chunks.indexOf(a.names[0]) - chunks.indexOf(b.names[0])
-      },
+      chunks: [pages[i].name],
+      // chunksSortMode: function (a, b) {
+      //   return  chunks.indexOf(a.names[0]) - chunks.indexOf(b.names[0])
+      // },
       filename: pages[i].filename,
       template: pages[i].template,
     }))
