@@ -46,10 +46,10 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      chunks: ['app'],
+      inject: false,
+      template: 'all.html',
       filename: 'all.html',
-      template: 'index.html',
-      inject: true
+      pages: pages      
     }),
     new FriendlyErrorsPlugin()
   ]

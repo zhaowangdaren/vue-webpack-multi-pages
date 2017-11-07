@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <title>All Entry</title>
 </head>
 <body>
-ALL
+  <% for (var i=0; i<htmlWebpackPlugin.options.pages.length; i++){%>
+    <div><a href="<%=htmlWebpackPlugin.options.pages[i].filename%>"><%=htmlWebpackPlugin.options.pages[i].filename%></a></div>
+  <%}%>
 </body>
 </html>

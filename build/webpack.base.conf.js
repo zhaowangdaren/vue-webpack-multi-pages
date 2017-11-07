@@ -21,9 +21,6 @@ function addEntry () {
 }
 
 var baseWebpackConfig = {
-  entry: {
-    app: './src/all.js'
-  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
