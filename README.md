@@ -1,6 +1,13 @@
 # vue-webpack-multi-pages
 
+> Based on vue-cli's webpack templates
+
+
 # Get Start
+1. Create `XXX.entry.js` under `src` folder, as new Page's entry
+2. Create `XXX.html` under the project as template, eg. `pageA.html`
+3. Write configuration in the `pages.js` file. For expample:
+
 `pages.js`:
 
 ```js
@@ -12,15 +19,12 @@ module.exports = [
     entry: 'pageA.entry.js', // pageA's entry file
     filename: 'pageA.html', // The file to write the HTML to. Please see "html-webpack-plugin"
     template: 'pageA.html', // Webpack require path to the template. Please see "html-webpack-plugin"
-    vendor: ['vue'] // Select the source chunks by chunk names. The chunk must be a child of the commons chunk.
-    // All chunks will be merged into '**-vendor.js'(eg:pageA-vendor).
   },
   {
     name: 'pageB',
-    entry: 'pageB.entry.js',
+    entry: ['pageB.entry.js'],
     filename: 'pageB.html',
-    template: 'pageB.html',
-    vendor: ['fetchJsonp']
+    template: 'pageB.html'
   },
   //Add your pages
 ]
