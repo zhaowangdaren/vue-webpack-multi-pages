@@ -23,29 +23,38 @@ function addPages() {
     entry: {},
     plugins: []
   }
-  for (let i = 0; i < pages.length; i++) {
-    multiConfig.entry[pages[i].name] = pages[i].entry
-    let chunks = ['manifest']
-    chunks = chunks.concat(pages[i].vendor)
-    chunks.push(pages[i].name)
-    multiConfig.plugins.push(new HtmlWebpackPlugin({
-      chunks: chunks,
-      chunksSortMode: function (a, b) {
-        return  chunks.indexOf(a.names[0]) - chunks.indexOf(b.names[0])
-      },
-      filename: pages[i].filename,
-      template: pages[i].template,
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-    }))
-  }
+  // for (let i = 0; i < pages.length; i++) {
+  //   multiConfig.entry[pages[i].name] = pages[i].entry
+  //   let chunks = pages[i].vendor
+  //   chunks.push(pages[i].name)
+  //   multiConfig.plugins.push(new HtmlWebpackPlugin({
+  //     chunks: chunks,
+  //     chunksSortMode: function (a, b) {
+  //       return  chunks.indexOf(a.names[0]) - chunks.indexOf(b.names[0])
+  //     },
+  //     filename: pages[i].filename,
+  //     template: pages[i].template,
+  //     inject: true,
+  //     minify: {
+  //       removeComments: true,
+  //       collapseWhitespace: true,
+  //       removeAttributeQuotes: true
+  //       // more options:
+  //       // https://github.com/kangax/html-minifier#options-quick-reference
+  //     },
+  //     // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+  //   }))
+
+  //   // multiConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+  //   //   name: pages[i].name + '-vendor',
+  //   //   chunks: pages[i].vendor
+  //   // }))
+    
+  // }
+  // multiConfig.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+  //     name: 'manifest',
+  //     // chunks: ['vendor']
+  // }))
   return multiConfig
 }
 

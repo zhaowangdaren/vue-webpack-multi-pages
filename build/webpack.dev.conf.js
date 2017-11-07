@@ -11,23 +11,19 @@ const pages = require('../pages')
 
 function addPages() {
   var multiConfig = {
-    entry: {},
     plugins: []
   }
-  for (let i = 0; i < pages.length; i++) {
-    multiConfig.entry[pages[i].name] = pages[i].entry
-    // let chunks = pages[i].entry
+  for (var i = 0; i < pages.length; i++) {
     multiConfig.plugins.push(new HtmlWebpackPlugin({
       chunks: [pages[i].name],
-      // chunksSortMode: function (a, b) {
-      //   return  chunks.indexOf(a.names[0]) - chunks.indexOf(b.names[0])
-      // },
       filename: pages[i].filename,
       template: pages[i].template,
+      inject: true
     }))
   }
   return multiConfig
 }
+
 baseWebpackConfig = merge(baseWebpackConfig, addPages())
 
 // add hot-reload related code to entry chunks
@@ -50,7 +46,8 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'index.html',
+      chunks: ['app'],
+      filename: 'all.html',
       template: 'index.html',
       inject: true
     }),

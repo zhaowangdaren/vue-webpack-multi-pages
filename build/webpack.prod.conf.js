@@ -9,12 +9,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const InlineChunkWebpackPlugin = require('html-webpack-inline-chunk-plugin')
+const pages = require('../pages')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : config.build.env
 
-const webpackConfig = merge(baseWebpackConfig, {
+var webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
@@ -53,44 +55,55 @@ const webpackConfig = merge(baseWebpackConfig, {
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.build.index,
-      template: 'index.html',
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
-    }),
+    // new HtmlWebpackPlugin({
+    //   filename: process.env.NODE_ENV === 'testing'
+    //     ? 'index.html'
+    //     : config.build.index,
+    //   template: 'index.html',
+    //   inject: true,
+    //   minify: {
+    //     removeComments: true,
+    //     collapseWhitespace: true,
+    //     removeAttributeQuotes: true
+    //     // more options:
+    //     // https://github.com/kangax/html-minifier#options-quick-reference
+    //   },
+    //   // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+    //   chunksSortMode: 'dependency'
+    // }),
     // keep module.id stable when vender modules does not change
     new webpack.HashedModuleIdsPlugin(),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vue',
+    //   minChunks: Infinity
+    // }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'fetchJsonp',
+    //   minChunks: Infinity
+    // }),
     // split vendor js into its own file
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: function (module) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
-      }
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   minChunks: function (module) {
+    //     // any required modules inside node_modules are extracted to vendor
+    //     return (
+    //       module.resource &&
+    //       /\.js$/.test(module.resource) &&
+    //       module.resource.indexOf(
+    //         path.join(__dirname, '../node_modules')
+    //       ) === 0
+    //     )
+    //   }
+    // }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest'
-      // chunks: ['vendor']
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'manifest',
+    //   chunks: ['common']
+    // }),
+    // new InlineChunkWebpackPlugin({
+    //   inlineChunks: ['manifest']
+    // }),
     // copy custom static assets
     new CopyWebpackPlugin([
       {
@@ -101,6 +114,45 @@ const webpackConfig = merge(baseWebpackConfig, {
     ])
   ]
 })
+
+function addPages () {
+  var multiConfig = {
+    plugins: []
+  }
+  for (var i = 0; i < pages.length; i++) {
+    multiConfig.plugins.push(new HtmlWebpackPlugin({
+      chunks: ['manifest', 'common', pages[i].name],
+      filename: pages[i].filename,
+      template: pages[i].template,
+      inject: true,
+      chunksSortMode: 'dependency'
+    }))
+  }
+  multiConfig.plugins.push(
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common',
+      chunks: pages.map(item => {
+        return item.name
+      })
+    })
+  )
+
+  multiConfig.plugins.push(
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      chunks: ['common']
+    })
+  )
+
+  multiConfig.plugins.push(
+    new InlineChunkWebpackPlugin({
+      inlineChunks: ['manifest']
+    })
+  )
+  return multiConfig
+}
+
+webpackConfig = merge(webpackConfig, addPages())
 
 if (config.build.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')

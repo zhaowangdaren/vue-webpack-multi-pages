@@ -3,16 +3,26 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const merge = require('webpack-merge')
+const pages = require('../pages')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-module.exports = {
+function addEntry () {
+  var multiEntryConfig = {
+    entry: {}
+  }
+  for (var i = 0; i < pages.length; i++) {
+    multiEntryConfig.entry[pages[i].name] = pages[i].entry
+  }
+  return multiEntryConfig
+}
+
+var baseWebpackConfig = {
   entry: {
-    app: './src/main.js',
-    vue: 'vue/dist/vue.esm.js',
-    fetchJsonp: 'fetch-jsonp'
+    app: './src/all.js'
   },
   output: {
     path: config.build.assetsRoot,
@@ -76,3 +86,5 @@ module.exports = {
     ]
   }
 }
+
+module.exports = merge(baseWebpackConfig, addEntry())
