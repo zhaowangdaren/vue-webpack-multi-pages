@@ -2,11 +2,13 @@
 webpack多页面开发脚手架。
 > 基于vue-cli的webpack模板改造而成。
 
-# Get Start
+# 开始
 1. 在`src`文件夹下创建`XXX.entry.js`作为一个新页面的入口，例如`pageA.entry.js`文件
 2. 在项目下创建`XXX.html`作为新页面的模版，例如`pageA.html`
 3. 最后在`pages.js`中写上相应的配置，例如:
+
 `pages.js`:
+
 ```js
 'use strict'
 
