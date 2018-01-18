@@ -15,7 +15,9 @@ function addEntry () {
     entry: {}
   }
   for (var i = 0; i < pages.length; i++) {
-    multiEntryConfig.entry[pages[i].name] = pages[i].entry
+    if (pages[i].entry && pages[i].entry.length > 0) {
+      multiEntryConfig.entry[pages[i].name] = pages[i].entry
+    }
   }
   return multiEntryConfig
 }

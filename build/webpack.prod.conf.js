@@ -120,13 +120,21 @@ function addPages () {
     plugins: []
   }
   for (var i = 0; i < pages.length; i++) {
-    multiConfig.plugins.push(new HtmlWebpackPlugin({
-      chunks: ['manifest', 'common', pages[i].name],
-      filename: pages[i].filename,
-      template: pages[i].template,
-      inject: true,
-      chunksSortMode: 'dependency'
-    }))
+    if (pages[i].entry && pages[i].entry.length > 0){
+      multiConfig.plugins.push(new HtmlWebpackPlugin({
+        chunks: ['manifest', 'common', pages[i].name],
+        filename: pages[i].filename,
+        template: pages[i].template,
+        inject: true,
+        chunksSortMode: 'dependency'
+      }))
+    } else {
+      multiConfig.plugins.push(new HtmlWebpackPlugin({
+        filename: pages[i].filename,
+        template: pages[i].template,
+        inject: false
+      }))
+    }
   }
   multiConfig.plugins.push(
     new webpack.optimize.CommonsChunkPlugin({
