@@ -122,13 +122,13 @@ function addPages () {
   for (var i = 0; i < pages.length; i++) {
     if (pages[i].entry && pages[i].entry.length > 0){
       multiConfig.plugins.push(new HtmlWebpackPlugin({
-        chunks: ['manifest', 'common', pages[i].name],
+        chunks: [pages[i].injectManifest ? 'manifest' : '', pages[i].injectCommon ? 'common' : '', pages[i].name],
         filename: pages[i].filename,
         template: pages[i].template,
         inject: true,
         chunksSortMode: 'dependency'
       }))
-    } else {
+    } else { // 无entry，则不inject js文件
       multiConfig.plugins.push(new HtmlWebpackPlugin({
         filename: pages[i].filename,
         template: pages[i].template,
